@@ -4,24 +4,31 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function MarketUpdate() {
+  // State keep which still actively filter
   const [activeTab, setActiveTab] = useState("View All");
-
+  //Filter tab
   const marketTabs = ["View All", "Metaverse", "Entertainment", "Energy", "NFT", "Gaming", "Music"];
 
-  // Data koin dari index.html lu
+  //Filtering
   const coins = [
-    { rank: 1, name: "Bitcoin", symbol: "BTC", icon: "/images/coin-1.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 2, name: "Ethereum", symbol: "ETH", icon: "/images/coin-2.svg", price: "$56,623.54", change: "-5.12%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
-    { rank: 3, name: "Tether", symbol: "USDT/USD", icon: "/images/coin-3.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 4, name: "BNB", symbol: "BNB/USD", icon: "/images/coin-4.svg", price: "$56,623.54", change: "-3.75%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
-    { rank: 5, name: "Solana", symbol: "SOL", icon: "/images/coin-5.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 6, name: "XRP", symbol: "XRP", icon: "/images/coin-6.svg", price: "$56,623.54", change: "-2.22%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
-    { rank: 7, name: "Cardano", symbol: "ADA", icon: "/images/coin-7.svg", price: "$56,623.54", change: "+0.8%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 8, name: "Avalanche", symbol: "AVAX", icon: "/images/coin-8.svg", price: "$56,623.54", change: "+1.41%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
+    { rank: 1, name: "Bitcoin", symbol: "BTC", category: "Energy", icon: "/images/coin-1.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
+    { rank: 2, name: "Ethereum", symbol: "ETH", category: "NFT", icon: "/images/coin-2.svg", price: "$56,623.54", change: "-5.12%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
+    { rank: 3, name: "Tether", symbol: "USDT/USD", category: "Energy", icon: "/images/coin-3.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
+    { rank: 4, name: "BNB", symbol: "BNB/USD", category: "Entertainment", icon: "/images/coin-4.svg", price: "$56,623.54", change: "-3.75%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
+    { rank: 5, name: "Solana", symbol: "SOL", category: "Metaverse", icon: "/images/coin-5.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
+    { rank: 6, name: "XRP", symbol: "XRP", category: "Entertainment", icon: "/images/coin-6.svg", price: "$56,623.54", change: "-2.22%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
+    { rank: 7, name: "Cardano", symbol: "ADA", category: "Gaming", icon: "/images/coin-7.svg", price: "$56,623.54", change: "+0.8%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
+    { rank: 8, name: "Avalanche", symbol: "AVAX", category: "Music", icon: "/images/coin-8.svg", price: "$56,623.54", change: "+1.41%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
   ];
 
+  // Logic FIlter
+  const filteredCoins = activeTab === "View All" 
+    ? coins 
+    : coins.filter(coin => coin.category === activeTab);
+
   return (
-    <section className="section market" aria-label="market update" data-section>
+    // Tambahin id="market" di sini biar navbar bisa scroll ke mari!
+    <section className="section market" id="market" aria-label="market update" data-section>
       <div className="container">
         
         <div className="title-wrapper">
@@ -30,12 +37,14 @@ export default function MarketUpdate() {
         </div>
 
         <div className="market-tab">
+          
           {/* NAVIGATION TAB */}
           <ul className="tab-nav">
             {marketTabs.map((tab) => (
               <li key={tab}>
                 <button 
                   className={`tab-btn ${activeTab === tab ? "active" : ""}`}
+                  // Button clicked, change state activeTab
                   onClick={() => setActiveTab(tab)}
                 >
                   {tab}
@@ -60,38 +69,46 @@ export default function MarketUpdate() {
             </thead>
 
             <tbody className="table-body">
-              {coins.map((coin) => (
-                <tr key={coin.rank} className="table-row">
-                  <td className="table-data">
-                    <button className="add-to-fav" aria-label="Add to favourite">
-                      {/* Note: Icon star aslinya pake ionicon, buat sementara gwe pake teks dulu biar ga error */}
-                      ⭐
-                    </button>
-                  </td>
-                  <th className="table-data rank" scope="row">{coin.rank}</th>
-                  <td className="table-data">
-                    <div className="wrapper">
-                      <img src={coin.icon} width="20" height="20" alt={`${coin.name} logo`} className="img" />
-                      <h3>
-                        <Link href="#" className="coin-name">
-                          {coin.name} <span className="span">{coin.symbol}</span>
-                        </Link>
-                      </h3>
-                    </div>
-                  </td>
-                  <td className="table-data last-price">{coin.price}</td>
-                  <td className={`table-data last-update ${coin.isUp ? "green" : "red"}`}>
-                    {coin.change}
-                  </td>
-                  <td className="table-data market-cap">{coin.marketCap}</td>
-                  <td className="table-data">
-                    <img src={coin.chart} width="100" height="40" alt={coin.isUp ? "profit chart" : "loss chart"} className="chart" />
-                  </td>
-                  <td className="table-data">
-                    <button className="btn btn-outline">Trade</button>
+              {filteredCoins.length > 0 ? (
+                filteredCoins.map((coin) => (
+                  <tr key={coin.rank} className="table-row">
+                    <td className="table-data">
+                      <button className="add-to-fav" aria-label="Add to favourite">
+                        <ion-icon name="star-outline" className="icon-outline"></ion-icon>
+                        <ion-icon name="star" className="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+                    <th className="table-data rank" scope="row">{coin.rank}</th>
+                    <td className="table-data">
+                      <div className="wrapper">
+                        <img src={coin.icon} width="20" height="20" alt={`${coin.name} logo`} className="img" />
+                        <h3>
+                          <Link href="#" className="coin-name">
+                            {coin.name} <span className="span">{coin.symbol}</span>
+                          </Link>
+                        </h3>
+                      </div>
+                    </td>
+                    <td className="table-data last-price">{coin.price}</td>
+                    <td className={`table-data last-update ${coin.isUp ? "green" : "red"}`}>
+                      {coin.change}
+                    </td>
+                    <td className="table-data market-cap">{coin.marketCap}</td>
+                    <td className="table-data">
+                      <img src={coin.chart} width="100" height="40" alt={coin.isUp ? "profit chart" : "loss chart"} className="chart" />
+                    </td>
+                    <td className="table-data">
+                      <button className="btn btn-outline">Trade</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={8} className="text-center py-8 text-gray-500">
+                    None categoty coin in {activeTab}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
 
