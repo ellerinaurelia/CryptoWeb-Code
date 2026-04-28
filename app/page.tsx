@@ -10,19 +10,25 @@ import About from "../components/About";
 import AppSection from "../components/AppSection";
 import Footer from "../components/Footer";
 
-export default function Home() {
-  useEffect(() => {
+useEffect(() => {
     const sections = document.querySelectorAll("[data-section]");
 
     const scrollReveal = () => {
       for (let i = 0; i < sections.length; i++) {
-        if (sections[i].getBoundingClientRect().top < window.innerHeight / 2) {
+        const elementTop = sections[i].getBoundingClientRect().top;
+        const elementBottom = sections[i].getBoundingClientRect().bottom;
+
+        if (elementTop < window.innerHeight / 1.2 && elementBottom > 0) {
           sections[i].classList.add("active");
+        } 
+        else {
+          sections[i].classList.remove("active");
         }
       }
     };
+
     window.addEventListener("scroll", scrollReveal);
-    scrollReveal(); 
+    scrollReveal();
 
     return () => window.removeEventListener("scroll", scrollReveal);
   }, []);
