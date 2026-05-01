@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <section className="section about active" aria-label="about" data-section>
+    <section className="section about active" id="about" aria-label="about" data-section>
       <div className="container">
         <figure className="about-banner">
           <img src="/images/about-banner.png" width="748" height="436" loading="lazy" alt="about banner" className="w-100" />
