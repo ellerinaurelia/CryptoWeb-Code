@@ -7,7 +7,6 @@ export default function Header() {
   const [isActive, setIsActive] = useState(false);
   const [headerActive, setHeaderActive] = useState(false);
 
-  // Logic buat toggle navbar (pengganti script.js lu)
   const toggleNavbar = () => {
     setIsActive(!isActive);
     if (!isActive) {
@@ -17,10 +16,9 @@ export default function Header() {
     }
   };
 
-  // Logic buat header aktif pas di-scroll (pengganti script.js lu)
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 300) {
+      if (window.scrollY > 100) {
         setHeaderActive(true);
       } else {
         setHeaderActive(false);
@@ -34,30 +32,31 @@ export default function Header() {
   return (
     <header className={`header ${headerActive ? "active" : ""}`} data-header>
       <div className="container">
-        <Link href="/" className="logo">
+        {/* Pake tag <a> buat link satu halaman (Anchor / ID) */}
+        <a href="#home" className="logo">
           <img src="/images/logo.svg" width="32" height="32" alt="Cryptex logo" />
           Cryptex
-        </Link>
+        </a>
 
         <nav className={`navbar ${isActive ? "active" : ""}`} data-navbar>
           <ul className="navbar-list">
             <li className="navbar-item">
-              <Link href="/" className="navbar-link active" onClick={toggleNavbar}>Homepage</Link>
+              <a href="#home" className="navbar-link" onClick={toggleNavbar}>Homepage</a>
             </li>
             <li className="navbar-item">
-              <Link href="#" className="navbar-link" onClick={toggleNavbar}>Buy Crypto</Link>
+              <a href="#market" className="navbar-link" onClick={toggleNavbar}>Buy Crypto</a>
             </li>
             <li className="navbar-item">
-              <Link href="#" className="navbar-link" onClick={toggleNavbar}>Markets</Link>
+              <a href="#trend" className="navbar-link" onClick={toggleNavbar}>Markets</a>
             </li>
             <li className="navbar-item">
-              <Link href="#" className="navbar-link" onClick={toggleNavbar}>Sell Crypto</Link>
+              <a href="#instruction" className="navbar-link" onClick={toggleNavbar}>Sell Crypto</a>
             </li>
             <li className="navbar-item">
-              <Link href="#" className="navbar-link" onClick={toggleNavbar}>Blog</Link>
+              <a href="#about" className="navbar-link" onClick={toggleNavbar}>Blog</a>
             </li>
             <li className="navbar-item">
-              <Link href="#" className="navbar-link" onClick={toggleNavbar}>BITUSDT</Link>
+              <a href="#app" className="navbar-link" onClick={toggleNavbar}>BITUSDT</a>
             </li>
           </ul>
         </nav>
@@ -72,6 +71,7 @@ export default function Header() {
           <span className="line line-3"></span>
         </button>
 
+        {/* Tetap pake <Link> karena ini pindah halaman ke /login */}
         <Link href="/login" className="btn btn-outline">Wallet</Link>
       </div>
     </header>
