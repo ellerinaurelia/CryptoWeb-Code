@@ -1,6 +1,6 @@
 export default function AppSection() {
   return (
-    <section className="section app active" aria-label="app" data-section>
+    <section className="section app active" id="app" aria-label="app" data-section>
       <div className="container">
         <div className="app-content">
           <h2 className="h2 section-title">Free Your Money & Invest With Confidence</h2>
