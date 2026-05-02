@@ -4,12 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function Trend() {
-  // Logic buat ganti tab aktif
   const [activeTab, setActiveTab] = useState("Crypto");
 
   const tabs = ["Crypto", "DeFi", "BSC", "NFT", "Metaverse", "Polkadot", "Solana", "Opensea", "Makersplace"];
-
-  // Data koin lu dari index.html
   const trendData = [
     { id: 1, name: "Bitcoin", symbol: "BTC/USD", value: "46,168.95", price: "36,641.20", change: "-0.79%", color: "red", icon: "/images/coin-1.svg" },
     { id: 2, name: "Ethereum", symbol: "ETH/USD", value: "3,480.04", price: "36,641.20", change: "+10.55%", color: "green", icon: "/images/coin-2.svg", active: true },
@@ -18,7 +15,7 @@ export default function Trend() {
   ];
 
   return (
-    <section className="section trend" aria-label="crypto trend" data-section>
+    <section className="section trend" id="trend" aria-label="crypto trend" data-section>
       <div className="container">
         <div className="trend-tab">
           

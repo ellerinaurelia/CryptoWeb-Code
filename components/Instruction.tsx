@@ -7,7 +7,7 @@ export default function Instruction() {
   ];
 
   return (
-    <section className="section instruction active" aria-label="instruction" data-section>
+    <section className="section instruction active" id="instruction" aria-label="instruction" data-section>
       <div className="container">
         <h2 className="h2 section-title">How It Work</h2>
         <p className="section-text">

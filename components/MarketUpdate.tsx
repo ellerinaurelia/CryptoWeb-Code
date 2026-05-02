@@ -4,12 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function MarketUpdate() {
-  // State keep which still actively filter
   const [activeTab, setActiveTab] = useState("View All");
-  //Filter tab
   const marketTabs = ["View All", "Metaverse", "Entertainment", "Energy", "NFT", "Gaming", "Music"];
 
-  //Filtering
   const coins = [
     { rank: 1, name: "Bitcoin", symbol: "BTC", category: "Energy", icon: "/images/coin-1.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
     { rank: 2, name: "Ethereum", symbol: "ETH", category: "NFT", icon: "/images/coin-2.svg", price: "$56,623.54", change: "-5.12%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
@@ -18,16 +15,12 @@ export default function MarketUpdate() {
     { rank: 5, name: "Solana", symbol: "SOL", category: "Metaverse", icon: "/images/coin-5.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
     { rank: 6, name: "XRP", symbol: "XRP", category: "Entertainment", icon: "/images/coin-6.svg", price: "$56,623.54", change: "-2.22%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
     { rank: 7, name: "Cardano", symbol: "ADA", category: "Gaming", icon: "/images/coin-7.svg", price: "$56,623.54", change: "+0.8%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 8, name: "Avalanche", symbol: "AVAX", category: "Music", icon: "/images/coin-8.svg", price: "$56,623.54", change: "+1.41%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-  ];
-
-  // Logic FIlter
+    { rank: 8, name: "Avalanche", symbol: "AVAX", category: "Music", icon: "/images/coin-8.svg", price: "$56,623.54", change: "+1.41%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },  // 3. LOGIC FILTER: Kalau "View All", keluarin semua. Kalau bukan, saring sesuai kategor
   const filteredCoins = activeTab === "View All" 
     ? coins 
     : coins.filter(coin => coin.category === activeTab);
 
   return (
-    // Tambahin id="market" di sini biar navbar bisa scroll ke mari!
     <section className="section market" id="market" aria-label="market update" data-section>
       <div className="container">
         
@@ -38,13 +31,12 @@ export default function MarketUpdate() {
 
         <div className="market-tab">
           
-          {/* NAVIGATION TAB */}
+          {/* TAB NAVIGATION */}
           <ul className="tab-nav">
             {marketTabs.map((tab) => (
               <li key={tab}>
                 <button 
                   className={`tab-btn ${activeTab === tab ? "active" : ""}`}
-                  // Button clicked, change state activeTab
                   onClick={() => setActiveTab(tab)}
                 >
                   {tab}
@@ -53,7 +45,6 @@ export default function MarketUpdate() {
             ))}
           </ul>
 
-          {/* TABLE MARKET */}
           <table className="market-table">
             <thead className="table-head">
               <tr className="table-row table-title">
@@ -74,8 +65,7 @@ export default function MarketUpdate() {
                   <tr key={coin.rank} className="table-row">
                     <td className="table-data">
                       <button className="add-to-fav" aria-label="Add to favourite">
-                        <ion-icon name="star-outline" className="icon-outline"></ion-icon>
-                        <ion-icon name="star" className="icon-fill"></ion-icon>
+                        ⭐
                       </button>
                     </td>
                     <th className="table-data rank" scope="row">{coin.rank}</th>
@@ -104,8 +94,8 @@ export default function MarketUpdate() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={8} className="text-center py-8 text-gray-500">
-                    None categoty coin in {activeTab}
+                  <td colSpan={8} style={{ textAlign: "center", padding: "20px", color: "#8a8f9e" }}>
+                    Belum ada koin di kategori {activeTab} bray!
                   </td>
                 </tr>
               )}

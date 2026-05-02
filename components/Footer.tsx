@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 export default function Footer() {
+  const IonIcon = "ion-icon" as any;
+
   return (
     <footer className="footer">
       <div className="footer-top" data-section>
@@ -12,7 +14,7 @@ export default function Footer() {
               Cryptex
             </Link>
 
-            <h2 className="footer-title">Let's talk! 🤙</h2>
+            <h2 className="footer-title">Let&apos;s talk! 🤙</h2>
 
             <address className="footer-contact-link">+12 345 678 9101</address>
             <address className="footer-contact-link">hello.cryptex@gmail.com</address>
@@ -69,11 +71,12 @@ export default function Footer() {
             &copy; 2022 Cryptex All Rights Reserved By <Link href="#" className="copyright-link">codewithsadee</Link>
           </p>
 
+          {/* SEKARANG KITA PAKE <IonIcon> BUKAN <ion-icon> */}
           <ul className="social-list">
-            <li><Link href="#" className="social-link"><ion-icon name="logo-facebook"></ion-icon></Link></li>
-            <li><Link href="#" className="social-link"><ion-icon name="logo-twitter"></ion-icon></Link></li>
-            <li><Link href="#" className="social-link"><ion-icon name="logo-instagram"></ion-icon></Link></li>
-            <li><Link href="#" className="social-link"><ion-icon name="logo-linkedin"></ion-icon></Link></li>
+            <li><Link href="#" className="social-link"><IonIcon name="logo-facebook"></IonIcon></Link></li>
+            <li><Link href="#" className="social-link"><IonIcon name="logo-twitter"></IonIcon></Link></li>
+            <li><Link href="#" className="social-link"><IonIcon name="logo-instagram"></IonIcon></Link></li>
+            <li><Link href="#" className="social-link"><IonIcon name="logo-linkedin"></IonIcon></Link></li>
           </ul>
         </div>
       </div>
