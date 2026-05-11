@@ -4,9 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function MarketUpdate() {
+  // 1. State buat nyimpen tab mana yang lagi diklik
   const [activeTab, setActiveTab] = useState("View All");
+
   const marketTabs = ["View All", "Metaverse", "Entertainment", "Energy", "NFT", "Gaming", "Music"];
 
+  // 2. Data koin (UDAH GWE TAMBAHIN 'category' BIAR BISA DIFILTER)
   const coins = [
     { rank: 1, name: "Bitcoin", symbol: "BTC", category: "Energy", icon: "/images/coin-1.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
     { rank: 2, name: "Ethereum", symbol: "ETH", category: "NFT", icon: "/images/coin-2.svg", price: "$56,623.54", change: "-5.12%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
@@ -15,12 +18,16 @@ export default function MarketUpdate() {
     { rank: 5, name: "Solana", symbol: "SOL", category: "Metaverse", icon: "/images/coin-5.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
     { rank: 6, name: "XRP", symbol: "XRP", category: "Entertainment", icon: "/images/coin-6.svg", price: "$56,623.54", change: "-2.22%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
     { rank: 7, name: "Cardano", symbol: "ADA", category: "Gaming", icon: "/images/coin-7.svg", price: "$56,623.54", change: "+0.8%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 8, name: "Avalanche", symbol: "AVAX", category: "Music", icon: "/images/coin-8.svg", price: "$56,623.54", change: "+1.41%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },  // 3. LOGIC FILTER: Kalau "View All", keluarin semua. Kalau bukan, saring sesuai kategor
+    { rank: 8, name: "Avalanche", symbol: "AVAX", category: "Music", icon: "/images/coin-8.svg", price: "$56,623.54", change: "+1.41%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
+  ];
+
+  // 3. LOGIC FILTER: Kalau "View All", keluarin semua. Kalau bukan, saring sesuai kategori
   const filteredCoins = activeTab === "View All" 
     ? coins 
     : coins.filter(coin => coin.category === activeTab);
 
   return (
+    // id="market" penting di sini biar Navbar "Buy Crypto" kaga nyasar
     <section className="section market" id="market" aria-label="market update" data-section>
       <div className="container">
         
@@ -59,8 +66,10 @@ export default function MarketUpdate() {
               </tr>
             </thead>
 
+            {/* TABEL ISI KOIN */}
             <tbody className="table-body">
               {filteredCoins.length > 0 ? (
+                // PAKE filteredCoins.map BUKAN coins.map
                 filteredCoins.map((coin) => (
                   <tr key={coin.rank} className="table-row">
                     <td className="table-data">
@@ -93,6 +102,7 @@ export default function MarketUpdate() {
                   </tr>
                 ))
               ) : (
+                // Kalau kategorinya kosong kaga ada koin
                 <tr>
                   <td colSpan={8} style={{ textAlign: "center", padding: "20px", color: "#8a8f9e" }}>
                     Belum ada koin di kategori {activeTab} bray!
