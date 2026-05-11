@@ -14,12 +14,11 @@ export default function Footer() {
               Cryptex
             </Link>
 
-            <h2 className="footer-title">Let&apos;s talk! 🤙</h2>
 
-            <address className="footer-contact-link">+12 345 678 9101</address>
-            <address className="footer-contact-link">hello.cryptex@gmail.com</address>
+            <address className="footer-contact-link">+62812 1111 1111</address>
+            <address className="footer-contact-link">custservice@cryptex.com</address>
             <address className="footer-contact-link">
-              Cecilia Chapman 711-2880 Nulla St. Mankato Mississippi 96522
+              Leenie Triahs 566 Nir St. Miets, North Sumatera, Medan
             </address>
           </div>
 
