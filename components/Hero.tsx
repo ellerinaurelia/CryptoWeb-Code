@@ -12,7 +12,7 @@ export default function Hero() {
             Coin Cryptex is the easiest, safest, and fastest way to buy & sell crypto asset exchange.
           </p>
 
-          {/* Tombol Get Started gwe arahin ke /login sesuai main.html lu */}
+          {/* Tombol Get Started arahin ke /login sesuai */}
           <Link href="/login" className="btn btn-primary">
             Get started now
           </Link>
