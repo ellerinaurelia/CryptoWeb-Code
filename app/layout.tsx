@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
+// IMPORT PRELOADER
+import Preloader from "@/components/Preloader"; 
+
 const dmSans = DM_Sans({ 
   subsets: ["latin"], 
   weight: ["400", "500", "700"],
@@ -19,11 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-  <html lang="en" className="scroll-smooth">
+  <html lang="en" className="scroll-smooth" suppressHydrationWarning>
     <body className={dmSans.className}>
+      
+      <Preloader />
+
       {children}
 
-      {/* Tambahin ini di bawah {children} biar icon-nya muncul bray! */}
+      {/* SCRIPT IONICONS */}
       <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
       <script noModule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>
