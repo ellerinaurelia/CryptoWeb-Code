@@ -70,7 +70,7 @@ export default function Footer() {
             &copy; 2022 Cryptex All Rights Reserved By <Link href="#" className="copyright-link">codewithsadee</Link>
           </p>
 
-          {/* SEKARANG KITA PAKE <IonIcon> BUKAN <ion-icon> */}
+          {/*<IonIcon>*/}
           <ul className="social-list">
             <li><Link href="#" className="social-link"><IonIcon name="logo-facebook"></IonIcon></Link></li>
             <li><Link href="#" className="social-link"><IonIcon name="logo-twitter"></IonIcon></Link></li>
