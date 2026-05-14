@@ -38,7 +38,7 @@ Built with a strict adherence to **Fast Client-Side Rendering**, **Clean Code Pr
 
 ## 🛠️ Component Blueprint
 
-This project implements strict separation of concerns within the `src/components/` directory. Here is the anatomy of our logic:
+This project implements strict separation of concerns within the `src/components/` directory. All 9 components work in absolute harmony (most of the time). Here is the anatomy of our logic:
 
 | Component | Role & Technical Highlight |
 | :--- | :--- |
@@ -46,6 +46,11 @@ This project implements strict separation of concerns within the `src/components
 | **`Header.tsx`** | **The Interaction Hub.** Actively stalks your scroll behavior via `useEffect` and uses DOM manipulation (`document.body.classList.add`) to freeze the screen when the mobile menu is open, preventing scrolling chaos. |
 | **`Preloader.tsx`** | **The UX Bodyguard.** Employs `sessionStorage` to check your visit history, runs its animation, and then literally destroys itself from the Virtual DOM so it doesn't become a memory burden. |
 | **`Instruction.tsx`** | **The DRY Evangelist.** Maps an array of objects directly into beautifully rendered UI cards, saving us from the ultimate developer sin: copy-pasting HTML structures four times. |
+| **`Hero.tsx`** | **The Hype Machine.** The welcoming face of the platform that features a massive Call-To-Action button, ruthlessly redirecting users to the `/login` portal because we don't do window shopping here. |
+| **`Trend.tsx`** | **The FOMO Generator.** Uses React state and mapping to display shiny crypto cards with active states, ensuring Ethereum always looks visually superior by default. |
+| **`About.tsx`** | **The Stateless Salesman.** Pure, unadulterated UI without the burden of React Hooks. Utilizes native HTML5 lazy loading (`loading="lazy"`) so we don't nuke the user's bandwidth with giant banner images. |
+| **`AppSection.tsx`** | **The Download Beggar.** A highly optimized static component politely asking users to download our mobile apps. Also features lazy-loaded assets for peak performance. |
+| **`Footer.tsx`** | **The TypeScript Rebellion.** Contains a massive, perfectly organized sitemap, our local operational address in Medan, and a literal TypeScript hack (`as any`) to force the compiler to accept Ionicons without throwing a tantrum. |
 
 ---
 
