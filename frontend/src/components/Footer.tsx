@@ -6,15 +6,18 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-top" data-section>
-        <div className="container">
 
-          <div className="footer-brand">
-            <Link href="/" className="logo">
+        {/* PEMBUNGKUS UTAMA: Belah jadi 2 Kubu (Kiri dan Kanan) /}
+        <div className="container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '40px', width: '100%' }}>
+
+          {/ ================= SISI KIRI (Brand Berjajar ke Bawah) ================= /}
+          <div className="footer-brand" style={{ display: 'flex', flexDirection: 'column', gap: '15px', flex: '1', minWidth: '250px' }}>
+            <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <img src="/images/logo.svg" width="32" height="32" alt="Cryptex logo" />
               Cryptex
             </Link>
 
-
+            {/ Alamat & Kontak berbaris rapi ke bawah /}
             <address className="footer-contact-link">+62812 1111 1111</address>
             <address className="footer-contact-link">custservice@cryptex.com</address>
             <address className="footer-contact-link">
@@ -22,55 +25,46 @@ export default function Footer() {
             </address>
           </div>
 
-          <ul className="footer-list">
-            <li><p className="footer-list-title">PRODUCTS</p></li>
-            <li><Link href="#" className="footer-link">Spot</Link></li>
-            <li><Link href="#" className="footer-link">Inverse Perpetual</Link></li>
-            <li><Link href="#" className="footer-link">USDT Perpetual</Link></li>
-            <li><Link href="#" className="footer-link">Exchange</Link></li>
-            <li><Link href="#" className="footer-link">Launchpad</Link></li>
-            <li><Link href="#" className="footer-link">Binance Pay</Link></li>
-          </ul>
 
-          <ul className="footer-list">
-            <li><p className="footer-list-title">SERVICES</p></li>
-            <li><Link href="#" className="footer-link">Buy Crypto</Link></li>
-            <li><Link href="#" className="footer-link">Markets</Link></li>
-            <li><Link href="#" className="footer-link">Tranding Fee</Link></li>
-            <li><Link href="#" className="footer-link">Affiliate Program</Link></li>
-            <li><Link href="#" className="footer-link">Referral Program</Link></li>
-            <li><Link href="#" className="footer-link">API</Link></li>
-          </ul>
+          {/ ================= SISI KANAN (Menu Rata Kiri, Berjejer Samping) ================= /}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', flex: '2', minWidth: '300px' }}>
 
-          <ul className="footer-list">
-            <li><p className="footer-list-title">SUPPORT</p></li>
-            <li><Link href="#" className="footer-link">Bybit Learn</Link></li>
-            <li><Link href="#" className="footer-link">Help Center</Link></li>
-            <li><Link href="#" className="footer-link">User Feedback</Link></li>
-            <li><Link href="#" className="footer-link">Submit a request</Link></li>
-            <li><Link href="#" className="footer-link">API Documentation</Link></li>
-            <li><Link href="#" className="footer-link">Trading Rules</Link></li>
-          </ul>
+            {/ BLOK NAVIGATION /}
+            <div style={{ textAlign: 'left' }}>
+              <p className="footer-list-title" style={{ marginBottom: '15px', color: '#fff' }}>NAVIGATION</p>
+              {/ flex-start bikin dia rata kiri, tapi tetep ke samping */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'flex-start' }}>
+                <Link href="/"
+className="footer-link">Homepage</Link>
+                <Link href="/buy" className="footer-link">Buy Crypto</Link>
+                <Link href="#market" className="footer-link">Markets</Link>
+                <Link href="/sell" className="footer-link">Sell Crypto</Link>
+                <Link href="/blog" className="footer-link">Blog</Link>
+              </div>
+            </div>
 
-          <ul className="footer-list">
-            <li><p className="footer-list-title">ABOUT US</p></li>
-            <li><Link href="#" className="footer-link">About Bybit</Link></li>
-            <li><Link href="#" className="footer-link">Authenticity Check</Link></li>
-            <li><Link href="#" className="footer-link">Careers</Link></li>
-            <li><Link href="#" className="footer-link">Business Contacts</Link></li>
-            <li><Link href="#" className="footer-link">Blog</Link></li>
-          </ul>
+            {/* BLOK LEGAL /}
+            <div style={{ textAlign: 'left' }}>
+              <p className="footer-list-title" style={{ marginBottom: '15px', color: '#fff' }}>LEGAL</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'flex-start' }}>
+                <Link href="/terms" className="footer-link">Terms of Service</Link>
+                <Link href="/privacy" className="footer-link">Privacy Policy</Link>
+                <Link href="/rules" className="footer-link">Trading Rules</Link>
+              </div>
+            </div>
+
+          </div>
 
         </div>
       </div>
 
+      {/ FOOTER BOTTOM (SOSMED DAN COPYRIGHT) */}
       <div className="footer-bottom">
-        <div className="container">
+        <div className="container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
           <p className="copyright">
-            &copy; 2022 Cryptex All Rights Reserved By <Link href="#" className="copyright-link">codewithsadee</Link>
+            &copy; 2026 Cryptex All Rights Reserved
           </p>
 
-          {/* SEKARANG KITA PAKE <IonIcon> BUKAN <ion-icon> */}
           <ul className="social-list">
             <li><Link href="#" className="social-link"><IonIcon name="logo-facebook"></IonIcon></Link></li>
             <li><Link href="#" className="social-link"><IonIcon name="logo-twitter"></IonIcon></Link></li>
