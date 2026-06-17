@@ -1,33 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function MarketUpdate() {
-  // 1. State buat nyimpen tab mana yang lagi diklik
   const [activeTab, setActiveTab] = useState("View All");
+  const [liveCoins, setLiveCoins] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const marketTabs = ["View All", "Metaverse", "Entertainment", "Energy", "NFT", "Gaming", "Music"];
 
-  // 2. Data koin (UDAH GWE TAMBAHIN 'category' BIAR BISA DIFILTER)
-  const coins = [
-    { rank: 1, name: "Bitcoin", symbol: "BTC", category: "Energy", icon: "/images/coin-1.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 2, name: "Ethereum", symbol: "ETH", category: "NFT", icon: "/images/coin-2.svg", price: "$56,623.54", change: "-5.12%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
-    { rank: 3, name: "Tether", symbol: "USDT/USD", category: "Energy", icon: "/images/coin-3.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 4, name: "BNB", symbol: "BNB/USD", category: "Entertainment", icon: "/images/coin-4.svg", price: "$56,623.54", change: "-3.75%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
-    { rank: 5, name: "Solana", symbol: "SOL", category: "Metaverse", icon: "/images/coin-5.svg", price: "$56,623.54", change: "+1.45%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 6, name: "XRP", symbol: "XRP", category: "Entertainment", icon: "/images/coin-6.svg", price: "$56,623.54", change: "-2.22%", isUp: false, marketCap: "$880,423,640,582", chart: "/images/chart-2.svg" },
-    { rank: 7, name: "Cardano", symbol: "ADA", category: "Gaming", icon: "/images/coin-7.svg", price: "$56,623.54", change: "+0.8%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-    { rank: 8, name: "Avalanche", symbol: "AVAX", category: "Music", icon: "/images/coin-8.svg", price: "$56,623.54", change: "+1.41%", isUp: true, marketCap: "$880,423,640,582", chart: "/images/chart-1.svg" },
-  ];
+  // MESIN PENARIK DATA LIVE 🚀
+  useEffect(() => {
+    const fetchLiveMarket = async () => {
+      try {
+        // Narik 20 koin teratas biar tab lu banyak isinya
+        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false');
+        const data = await res.json();
 
-  // 3. LOGIC FILTER: Kalau "View All", keluarin semua. Kalau bukan, saring sesuai kategori
+        // Ngerombak data internet biar cocok sama variabel HTML desain lu
+        const formattedData = data.map((coin: any, index: number) => {
+          // Trik biar Tab lu tetep berfungsi: kita bagiin kategori merata ke koin-koin live ini
+          const categories = ["Metaverse", "Entertainment", "Energy", "NFT", "Gaming", "Music"];
+          const assignedCategory = categories[index % categories.length];
+
+          return {
+            rank: coin.market_cap_rank,
+            name: coin.name,
+            symbol: coin.symbol.toUpperCase(),
+            category: assignedCategory, 
+            icon: coin.image, // Pake logo asli dari CoinGecko
+            price: `$${coin.current_price.toLocaleString()}`,
+            change: `${coin.price_change_percentage_24h > 0 ? '+' : ''}${coin.price_change_percentage_24h.toFixed(2)}%`,
+            isUp: coin.price_change_percentage_24h > 0,
+            marketCap: `$${coin.market_cap.toLocaleString()}`,
+            // Pake gambar chart lu sesuai kondisi koin naik/turun
+            chart: coin.price_change_percentage_24h > 0 ? "/images/chart-1.svg" : "/images/chart-2.svg" 
+          };
+        });
+
+        setLiveCoins(formattedData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Gagal narik data boi:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchLiveMarket();
+  }, []);
+
+  // LOGIC FILTER: Saring koin live sesuai Tab yang diklik
   const filteredCoins = activeTab === "View All" 
-    ? coins 
-    : coins.filter(coin => coin.category === activeTab);
+    ? liveCoins 
+    : liveCoins.filter((coin: any) => coin.category === activeTab);
 
   return (
-    // id="market" penting di sini biar Navbar "Buy Crypto" kaga nyasar
     <section className="section market" id="market" aria-label="market update" data-section>
       <div className="container">
         
@@ -66,11 +94,16 @@ export default function MarketUpdate() {
               </tr>
             </thead>
 
-            {/* TABEL ISI KOIN */}
+            {/* TABEL ISI KOIN LIVE */}
             <tbody className="table-body">
-              {filteredCoins.length > 0 ? (
-                // PAKE filteredCoins.map BUKAN coins.map
-                filteredCoins.map((coin) => (
+              {loading ? (
+                <tr>
+                  <td colSpan={8} style={{ textAlign: "center", padding: "40px", color: "#8a8f9e" }}>
+                    Menyambungkan ke Wall Street... 🚀
+                  </td>
+                </tr>
+              ) : filteredCoins.length > 0 ? (
+                filteredCoins.map((coin: any) => (
                   <tr key={coin.rank} className="table-row">
                     <td className="table-data">
                       <button className="add-to-fav" aria-label="Add to favourite">
@@ -102,7 +135,6 @@ export default function MarketUpdate() {
                   </tr>
                 ))
               ) : (
-                // Kalau kategorinya kosong kaga ada koin
                 <tr>
                   <td colSpan={8} style={{ textAlign: "center", padding: "20px", color: "#8a8f9e" }}>
                     Belum ada koin di kategori {activeTab} bray!
@@ -115,5 +147,5 @@ export default function MarketUpdate() {
         </div>
       </div>
     </section>
-  );
+  );  
 }
