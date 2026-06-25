@@ -9,7 +9,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const router = useRouter(); 
 
-  // 👇 INI YANG GWE OPERASI BOIII
   const handleLogin = async (e: any) => {
     e.preventDefault();
     
