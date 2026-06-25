@@ -6,6 +6,8 @@ import Link from "next/link";
 export default function Header() {
   const [isActive, setIsActive] = useState(false);
   const [headerActive, setHeaderActive] = useState(false);
+  // 👇 Bikin state buat nyatet lu udah login apa belum
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleNavbar = () => {
     setIsActive(!isActive);
@@ -29,10 +31,17 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 👇 SATPAM CEK KTP: Ngecek memori browser pas halaman diload
+  useEffect(() => {
+    const user = localStorage.getItem("username");
+    if (user) {
+      setIsLoggedIn(true); 
+    }
+  }, []);
+
   return (
     <header className={`header ${headerActive ? "active" : ""}`} data-header>
       <div className="container">
-        {/* Pake tag <a> buat link satu halaman (Anchor / ID) */}
         <a href="#home" className="logo">
           <img src="/images/logo.svg" width="32" height="32" alt="Cryptex logo" />
           Cryptex
@@ -44,13 +53,21 @@ export default function Header() {
               <a href="#home" className="navbar-link" onClick={toggleNavbar}>Homepage</a>
             </li>
             <li className="navbar-item">
-              <a href="#market" className="navbar-link" onClick={toggleNavbar}>Buy Crypto</a>
+              {isLoggedIn ? (
+                <Link href="/buy" className="navbar-link" onClick={toggleNavbar}>Buy Crypto</Link>
+              ) : (
+                <a href="#market" className="navbar-link" onClick={toggleNavbar}>Buy Crypto</a>
+              )}
             </li>
             <li className="navbar-item">
               <a href="#trend" className="navbar-link" onClick={toggleNavbar}>Markets</a>
             </li>
             <li className="navbar-item">
-              <a href="#instruction" className="navbar-link" onClick={toggleNavbar}>Sell Crypto</a>
+              {isLoggedIn ? (
+                <Link href="/trade" className="navbar-link" onClick={toggleNavbar}>Sell Crypto</Link>
+              ) : (
+                <a href="#instruction" className="navbar-link" onClick={toggleNavbar}>Sell Crypto</a>
+              )}
             </li>
             <li className="navbar-item">
               <a href="#about" className="navbar-link" onClick={toggleNavbar}>Blog</a>
@@ -71,8 +88,17 @@ export default function Header() {
           <span className="line line-3"></span>
         </button>
 
-        {/* Tetap pake <Link> karena ini pindah halaman ke /login */}
-        <Link href="/login" className="btn btn-outline">Wallet</Link>
+        {/* 👇 LOGIKA TOMBOL PINTAR: Hilangin tombol Wallet kalau udah login! */}
+        {isLoggedIn ? (
+          <Link href="/dashboard" className="btn btn-outline" style={{ backgroundColor: '#3b82f6', color: '#fff', border: 'none' }}>
+            Dashboard Gwe
+          </Link>
+        ) : (
+          <Link href="/login" className="btn btn-outline">
+            Login / Wallet
+          </Link>
+        )}
+
       </div>
     </header>
   );
