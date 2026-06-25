@@ -9,16 +9,40 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSignUp = (e: any) => {
+  // 👇 Ini kabel API aslinya boiii
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      alert("Passwords do not match boiii!");
       return;
     }
 
-    console.log("Registration attempted:", username, email);
-    alert("Sign Up button clicked! (Backend integration coming soon)");
+    try {
+      const response = await fetch("http://172.24.102.97:3001/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Mantap! Akun berhasil dibikin. Dapet modal $10,000 nih bos!");
+        // Langsung otomatis pindah ke halaman login abis sukses daftar
+        window.location.href = "/login"; 
+      } else {
+        alert("Gagal boiii: " + data.error);
+      }
+    } catch (error) {
+      alert("Waduh, koneksi ke backend putus! Pastiin Rails lu udah jalan ya.");
+    }
   };
 
   return (
