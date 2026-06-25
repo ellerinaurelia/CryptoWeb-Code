@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function Header() {
   const [isActive, setIsActive] = useState(false);
   const [headerActive, setHeaderActive] = useState(false);
-  // 👇 Bikin state buat nyatet lu udah login apa belum
+  // State buat nyatet lu udah login apa belum
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleNavbar = () => {
@@ -31,7 +31,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 👇 SATPAM CEK KTP: Ngecek memori browser pas halaman diload
+  //Ngecek memori browser pas halaman diload
   useEffect(() => {
     const user = localStorage.getItem("username");
     if (user) {
@@ -88,7 +88,7 @@ export default function Header() {
           <span className="line line-3"></span>
         </button>
 
-        {/* 👇 LOGIKA TOMBOL PINTAR: Hilangin tombol Wallet kalau udah login! */}
+        {/*Hilangin tombol Wallet kalau udah login! */}
         {isLoggedIn ? (
           <Link href="/dashboard" className="btn btn-outline" style={{ backgroundColor: '#3b82f6', color: '#fff', border: 'none' }}>
             Dashboard Gwe
