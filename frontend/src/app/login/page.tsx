@@ -2,18 +2,46 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // <-- Kita panggil satpam rute Next.js
+import { useRouter } from "next/navigation"; // <-- Satpam rute Next.js
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); // <-- Inisialisasi router
+  const router = useRouter(); 
 
-  const handleLogin = (e: any) => {
+  // 👇 INI YANG GWE OPERASI BOIII
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     
-    // Begitu tombol diklik, langsung tendang otomatis ke dashboard!
-    router.push("/dashboard");
+    try {
+      // 1. Ketuk pintu pabrik Rails lu buat nyocokin email & password
+      const response = await fetch("http://172.24.102.97:3001/login", { 
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // 2. KTP DITERIMA! Simpen nama dan ID lu ke dalem memori Browser
+        localStorage.setItem("user_id", data.user.id);
+        localStorage.setItem("username", data.user.username);
+        
+        // 3. Baru deh lu ditendang masuk ke Dashboard dengan resmi!
+        router.push("/dashboard");
+      } else {
+        // Kalau email/password salah, satpam ngamuk
+        alert("Login Failed" + data.error);
+      }
+    } catch (error) {
+      alert("Waduh, koneksi ke backend putus! Pastiin server Rails jalan.");
+    }
   };
 
   return (
