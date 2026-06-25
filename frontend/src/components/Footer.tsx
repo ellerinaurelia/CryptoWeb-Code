@@ -6,18 +6,18 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-top" data-section>
-
-        {/* PEMBUNGKUS UTAMA: Belah jadi 2 Kubu (Kiri dan Kanan) /}
+        
+        {/* PEMBUNGKUS UTAMA: Belah jadi 2 Kubu (Kiri dan Kanan) */}
         <div className="container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '40px', width: '100%' }}>
 
-          {/ ================= SISI KIRI (Brand Berjajar ke Bawah) ================= /}
+          {/*Brand Berjajar ke Bawah*/}
           <div className="footer-brand" style={{ display: 'flex', flexDirection: 'column', gap: '15px', flex: '1', minWidth: '250px' }}>
             <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <img src="/images/logo.svg" width="32" height="32" alt="Cryptex logo" />
               Cryptex
             </Link>
-
-            {/ Alamat & Kontak berbaris rapi ke bawah /}
+            
+            {/* Alamat & Kontak berbaris rapi ke bawah */}
             <address className="footer-contact-link">+62812 1111 1111</address>
             <address className="footer-contact-link">custservice@cryptex.com</address>
             <address className="footer-contact-link">
@@ -26,16 +26,15 @@ export default function Footer() {
           </div>
 
 
-          {/ ================= SISI KANAN (Menu Rata Kiri, Berjejer Samping) ================= /}
+          {/*Berjejer Samping*/}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', flex: '2', minWidth: '300px' }}>
-
-            {/ BLOK NAVIGATION /}
+            
+            {/* BLOK NAVIGATION */}
             <div style={{ textAlign: 'left' }}>
               <p className="footer-list-title" style={{ marginBottom: '15px', color: '#fff' }}>NAVIGATION</p>
-              {/ flex-start bikin dia rata kiri, tapi tetep ke samping */}
+              {/* flex-start bikin dia rata kiri, tapi tetep ke samping */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'flex-start' }}>
-                <Link href="/"
-className="footer-link">Homepage</Link>
+                <Link href="/" className="footer-link">Homepage</Link>
                 <Link href="/buy" className="footer-link">Buy Crypto</Link>
                 <Link href="#market" className="footer-link">Markets</Link>
                 <Link href="/sell" className="footer-link">Sell Crypto</Link>
@@ -43,7 +42,7 @@ className="footer-link">Homepage</Link>
               </div>
             </div>
 
-            {/* BLOK LEGAL /}
+            {/* BLOK LEGAL */}
             <div style={{ textAlign: 'left' }}>
               <p className="footer-list-title" style={{ marginBottom: '15px', color: '#fff' }}>LEGAL</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'flex-start' }}>
@@ -58,7 +57,7 @@ className="footer-link">Homepage</Link>
         </div>
       </div>
 
-      {/ FOOTER BOTTOM (SOSMED DAN COPYRIGHT) */}
+      {/* FOOTER BOTTOM (SOSMED DAN COPYRIGHT) */}
       <div className="footer-bottom">
         <div className="container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
           <p className="copyright">
