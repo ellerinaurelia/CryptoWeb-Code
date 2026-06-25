@@ -1,139 +1,109 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function DashboardPage() {
+export default function Dashboard() {
+  const [namaUser, setNamaUser] = useState("Loading...");
+  const [totalBalance, setTotalBalance] = useState("0.00");
+  const [assets, setAssets] = useState<any[]>([]);
+  const [isLoadingPorto, setIsLoadingPorto] = useState(true);
   const router = useRouter();
-  
-  const [user, setUser] = useState<{name: string, email: string, status: string} | null>(null);
-  const [usdtBalance, setUsdtBalance] = useState(10500.00);
-  const [btcBalance, setBtcBalance] = useState(0.45);
-  const [tradeMode, setTradeMode] = useState("BUY"); 
-  const [tradeAmount, setTradeAmount] = useState("");
-
-  const BTC_PRICE = 50000;
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!isLoggedIn) {
+    const simpenanNama = localStorage.getItem("username");
+    if (!simpenanNama) {
       router.push("/login");
     } else {
-      const savedUser = localStorage.getItem("userData");
-      if (savedUser) setUser(JSON.parse(savedUser));
+      setNamaUser(simpenanNama);
+
+      // 👇 BACA DOMPET BROWSER
+      let localBalance = localStorage.getItem("my_balance");
+      let localPorto = localStorage.getItem("my_porto");
+
+      // Kalau baru pertama main, kasih 10k gratis!
+      if (!localBalance) {
+        localBalance = "10000";
+        localStorage.setItem("my_balance", localBalance);
+      }
+      if (!localPorto) {
+        localPorto = "[]"; // Porto kosong di awal
+        localStorage.setItem("my_porto", localPorto);
+      }
+
+      setTotalBalance(parseFloat(localBalance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+      setAssets(JSON.parse(localPorto));
+      setIsLoadingPorto(false);
     }
   }, [router]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userData");
+  const handleLogout = (e: any) => {
+    e.preventDefault();
+    localStorage.removeItem("username");
+    localStorage.removeItem("my_balance"); // Hapus dompet biar reset pas login lagi
+    localStorage.removeItem("my_porto");
     router.push("/login");
   };
 
-  const handleTrade = () => {
-    const amountNum = parseFloat(tradeAmount);
-    if (!amountNum || amountNum <= 0) return alert("Masukin nominal yang bener boi!");
-
-    if (tradeMode === "BUY") {
-      if (amountNum > usdtBalance) return alert("Saldo USDT kaga cukup!");
-      setUsdtBalance((prev) => prev - amountNum);
-      setBtcBalance((prev) => prev + (amountNum / BTC_PRICE));
-      alert(`Sukses beli ${(amountNum / BTC_PRICE).toFixed(4)} BTC!`);
-    } else {
-      if (amountNum > btcBalance) return alert("Saldo BTC kaga cukup!");
-      setBtcBalance((prev) => prev - amountNum);
-      setUsdtBalance((prev) => prev + (amountNum * BTC_PRICE));
-      alert(`Sukses jual ${amountNum} BTC! Dapet $${(amountNum * BTC_PRICE).toLocaleString()}`);
-    }
-    setTradeAmount("");
-  };
-
-  if (!user) return null;
-
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#161b25", padding: "30px", color: "white", fontFamily: "sans-serif" }}>
-      
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #2a2d3a", paddingBottom: "20px", marginBottom: "30px" }}>
-        <h2 style={{ margin: 0 }}>Cryptex Dashboard</h2>
+    <section style={{ minHeight: '100vh', backgroundColor: '#111', color: '#fff', padding: '60px 20px 50px' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         
-        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-          <div style={{ textAlign: "right" }}>
-            <p style={{ margin: 0, fontWeight: "bold" }}>{user.name}</p>
-            <p style={{ margin: 0, fontSize: "12px", color: "#8a8f9e" }}>{user.email}</p>
+        <div style={{ marginBottom: '30px' }}>
+          <Link href="/" style={{ color: '#8a8f9e', textDecoration: 'none', fontSize: '15px', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+            ← Back to Homepage
+          </Link>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+          <div>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold', margin: '0 0 5px 0' }}>Dashboard</h1>
+            <p style={{ color: '#8a8f9e', margin: 0 }}>Welcome back, {namaUser}! 🚀</p>
           </div>
-          <button onClick={handleLogout} style={{ padding: "8px 16px", backgroundColor: "#1a1d27", color: "#ef4444", border: "1px solid #2a2d3a", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" }}>
+          <button onClick={handleLogout} style={{ padding: '10px 20px', backgroundColor: '#2b2f3a', color: '#fff', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>
             Log Out
           </button>
         </div>
-      </div>
 
-      <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-        
-        <div style={{ flex: "1 1 400px", display: "flex", flexDirection: "column", gap: "20px" }}>
-          <div style={{ backgroundColor: "#12141c", padding: "30px", borderRadius: "16px", border: "1px solid #2a2d3a" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <p style={{ color: "#8a8f9e", margin: 0, fontSize: "14px" }}>Total Balance (USDT)</p>
-              <span style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", color: "#10b981", padding: "4px 8px", borderRadius: "4px", fontSize: "12px", fontWeight: "bold" }}>{user.status}</span>
-            </div>
-            <h1 style={{ margin: "10px 0", fontSize: "42px" }}>
-              ${usdtBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </h1>
-          </div>
-
-          <div style={{ backgroundColor: "#12141c", padding: "30px", borderRadius: "16px", border: "1px solid #2a2d3a" }}>
-            <p style={{ color: "#8a8f9e", margin: 0, paddingBottom: "15px", borderBottom: "1px solid #2a2d3a", fontWeight: "bold" }}>Your Assets</p>
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px", alignItems: "center" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <div style={{ width: "30px", height: "30px", backgroundColor: "#f7931a", borderRadius: "50%" }}></div>
-                <span style={{ fontWeight: "bold", fontSize: "18px" }}>Bitcoin (BTC)</span>
-              </div>
-              <span style={{ fontSize: "18px" }}>{btcBalance.toFixed(4)} BTC</span>
-            </div>
-          </div>
-          
-          <div style={{ backgroundColor: "#12141c", padding: "30px", borderRadius: "16px", border: "1px solid #2a2d3a" }}>
-            <p style={{ color: "#8a8f9e", margin: 0, paddingBottom: "15px", borderBottom: "1px solid #2a2d3a", fontWeight: "bold" }}>Recent Transactions</p>
-            <div style={{ marginTop: "15px", fontSize: "14px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
-                <span>Deposit USDT</span>
-                <span style={{ color: "#10b981" }}>+$5,000.00</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
-                <span>Buy BTC</span>
-                <span style={{ color: "#ef4444" }}>-0.10 BTC</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Withdraw USDT</span>
-                <span style={{ color: "#ef4444" }}>-$200.00</span>
-              </div>
-            </div>
+        <div style={{ backgroundColor: '#1e2029', padding: '40px', borderRadius: '24px', border: '1px solid #2b2f3a', boxShadow: '0 10px 40px rgba(0,0,0,0.6)', marginBottom: '30px', textAlign: 'center' }}>
+          <p style={{ color: '#8a8f9e', fontSize: '16px', marginBottom: '10px' }}>Available USD Balance</p>
+          <h2 style={{ fontSize: '48px', fontWeight: 'bold', margin: '0 0 20px 0', color: '#fff' }}>
+            {isLoadingPorto ? "Menghitung..." : <><span style={{ color: '#3b82f6' }}>$</span>{totalBalance}</>}
+          </h2>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
+            <Link href="/buy" style={{ padding: '12px 30px', backgroundColor: '#3b82f6', color: '#fff', borderRadius: '12px', textDecoration: 'none', fontWeight: 'bold' }}>Buy Crypto</Link>
+            <Link href="/sell" style={{ padding: '12px 30px', backgroundColor: '#e74c3c', color: '#fff', borderRadius: '12px', textDecoration: 'none', fontWeight: 'bold' }}>Sell Crypto</Link>
           </div>
         </div>
 
-        <div style={{ flex: "1 1 350px", backgroundColor: "#12141c", padding: "30px", borderRadius: "16px", border: "1px solid #2a2d3a", height: "fit-content" }}>
-          <h3 style={{ margin: "0 0 20px 0" }}>Quick Trade</h3>
-          
-          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-            <button onClick={() => setTradeMode("BUY")} style={{ flex: 1, padding: "12px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: "bold", backgroundColor: tradeMode === "BUY" ? "#004ecc" : "#1a1d27", color: "white" }}>BUY BTC</button>
-            <button onClick={() => setTradeMode("SELL")} style={{ flex: 1, padding: "12px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: "bold", backgroundColor: tradeMode === "SELL" ? "#ef4444" : "#1a1d27", color: "white" }}>SELL BTC</button>
-          </div>
-
-          <p style={{ fontSize: "13px", color: "#8a8f9e", marginBottom: "10px" }}>Current Price: 1 BTC = $50,000</p>
-          
-          <input
-            type="number"
-            placeholder={tradeMode === "BUY" ? "Amount to spend (USDT)" : "Amount to sell (BTC)"}
-            value={tradeAmount}
-            onChange={(e) => setTradeAmount(e.target.value)}
-            style={{ width: "100%", boxSizing: "border-box", padding: "16px", backgroundColor: "#1a1d27", border: "1px solid #2d313e", borderRadius: "12px", color: "white", fontSize: "16px", marginBottom: "20px", outline: "none" }}
-          />
-
-          <button onClick={handleTrade} style={{ width: "100%", padding: "16px", backgroundColor: tradeMode === "BUY" ? "#004ecc" : "#ef4444", color: "white", borderRadius: "12px", fontSize: "16px", fontWeight: "bold", border: "none", cursor: "pointer" }}>
-            {tradeMode === "BUY" ? "Confirm Buy" : "Confirm Sell"}
-          </button>
+        <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px' }}>My Portfolio</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          {isLoadingPorto ? (
+            <p style={{ color: '#8a8f9e', textAlign: 'center' }}>Narik data dompet...</p>
+          ) : assets.length === 0 ? (
+            <p style={{ color: '#8a8f9e', textAlign: 'center', padding: '20px', backgroundColor: '#1e2029', borderRadius: '16px' }}>Belum ada koin nih boiii, gas beli dulu! 🚀</p>
+          ) : (
+            assets.map((asset: any, index: number) => (
+              <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1e2029', padding: '20px', borderRadius: '16px', border: '1px solid #2b2f3a' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: asset.color, display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold', color: '#fff', fontSize: '12px' }}>
+                    {asset.coin.substring(asset.coin.indexOf('(')+1, asset.coin.indexOf(')'))}
+                  </div>
+                  <div>
+                    <h4 style={{ margin: '0 0 5px 0', fontSize: '16px', fontWeight: 'bold' }}>{asset.coin}</h4>
+                    <p style={{ margin: 0, color: '#8a8f9e', fontSize: '14px' }}>{asset.amount} Coins</p>
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <h4 style={{ margin: '0 0 5px 0', fontSize: '16px', fontWeight: 'bold' }}>${parseFloat(asset.value).toLocaleString()}</h4>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
       </div>
-    </div>
+    </section>
   );
 }
