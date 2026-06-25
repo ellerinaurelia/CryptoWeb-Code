@@ -20,7 +20,7 @@ export default function BuyCrypto() {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.error("Gagal narik data:", err);
+        console.error("Failed pto pull data:", err);
         setIsLoading(false);
       });
   }, []);
