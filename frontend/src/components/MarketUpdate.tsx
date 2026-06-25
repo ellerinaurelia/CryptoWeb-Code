@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function MarketUpdate() {
   const [activeTab, setActiveTab] = useState("View All");
-  const [liveCoins, setLiveCoins] = useState([]);
+  const [liveCoins, setLiveCoins] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const marketTabs = ["View All", "Metaverse", "Entertainment", "Energy", "NFT", "Gaming", "Music"];
@@ -14,13 +14,10 @@ export default function MarketUpdate() {
   useEffect(() => {
     const fetchLiveMarket = async () => {
       try {
-        // Narik 20 koin teratas biar tab lu banyak isinya
         const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false');
         const data = await res.json();
 
-        // Ngerombak data internet biar cocok sama variabel HTML desain lu
         const formattedData = data.map((coin: any, index: number) => {
-          // Trik biar Tab lu tetep berfungsi: kita bagiin kategori merata ke koin-koin live ini
           const categories = ["Metaverse", "Entertainment", "Energy", "NFT", "Gaming", "Music"];
           const assignedCategory = categories[index % categories.length];
 
@@ -29,12 +26,11 @@ export default function MarketUpdate() {
             name: coin.name,
             symbol: coin.symbol.toUpperCase(),
             category: assignedCategory, 
-            icon: coin.image, // Pake logo asli dari CoinGecko
-            price: `$${coin.current_price.toLocaleString()}`,
-            change: `${coin.price_change_percentage_24h > 0 ? '+' : ''}${coin.price_change_percentage_24h.toFixed(2)}%`,
+            icon: coin.image, 
+            price: `$${coin.current_price?.toLocaleString() || '0'}`,
+            change: `${coin.price_change_percentage_24h > 0 ? '+' : ''}${coin.price_change_percentage_24h?.toFixed(2) || '0.00'}%`,
             isUp: coin.price_change_percentage_24h > 0,
-            marketCap: `$${coin.market_cap.toLocaleString()}`,
-            // Pake gambar chart lu sesuai kondisi koin naik/turun
+            marketCap: `$${coin.market_cap?.toLocaleString() || '0'}`,
             chart: coin.price_change_percentage_24h > 0 ? "/images/chart-1.svg" : "/images/chart-2.svg" 
           };
         });
@@ -50,7 +46,6 @@ export default function MarketUpdate() {
     fetchLiveMarket();
   }, []);
 
-  // LOGIC FILTER: Saring koin live sesuai Tab yang diklik
   const filteredCoins = activeTab === "View All" 
     ? liveCoins 
     : liveCoins.filter((coin: any) => coin.category === activeTab);
@@ -66,7 +61,6 @@ export default function MarketUpdate() {
 
         <div className="market-tab">
           
-          {/* TAB NAVIGATION */}
           <ul className="tab-nav">
             {marketTabs.map((tab) => (
               <li key={tab}>
@@ -94,7 +88,6 @@ export default function MarketUpdate() {
               </tr>
             </thead>
 
-            {/* TABEL ISI KOIN LIVE */}
             <tbody className="table-body">
               {loading ? (
                 <tr>
@@ -106,9 +99,7 @@ export default function MarketUpdate() {
                 filteredCoins.map((coin: any) => (
                   <tr key={coin.rank} className="table-row">
                     <td className="table-data">
-                      <button className="add-to-fav" aria-label="Add to favourite">
-                        ⭐
-                      </button>
+                      <button className="add-to-fav" aria-label="Add to favourite">⭐</button>
                     </td>
                     <th className="table-data rank" scope="row">{coin.rank}</th>
                     <td className="table-data">
@@ -129,8 +120,25 @@ export default function MarketUpdate() {
                     <td className="table-data">
                       <img src={coin.chart} width="100" height="40" alt={coin.isUp ? "profit chart" : "loss chart"} className="chart" />
                     </td>
+                    {/*NEMBAK LANGSUNG KE /BUY */}
                     <td className="table-data">
-                      <button className="btn btn-outline">Trade</button>
+                      <button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.location.href = "/buy"; 
+                        }} 
+                        className="btn btn-outline" 
+                        style={{ 
+                          display: 'inline-block', 
+                          padding: '8px 20px', 
+                          position: 'relative', 
+                          zIndex: 9999, 
+                          cursor: 'pointer',
+                          pointerEvents: 'auto' 
+                        }}
+                      >
+                        Trade
+                      </button>
                     </td>
                   </tr>
                 ))
