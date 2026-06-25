@@ -10,30 +10,27 @@ export default function Trend() {
 
   const tabs = ["Crypto", "DeFi", "BSC", "NFT", "Metaverse", "Gaming", "Music"];
 
-  // MESIN PENARIK DATA TRENDING 🔥
   useEffect(() => {
     const fetchTrendingCoins = async () => {
       try {
-        // Narik data koin berdasarkan volume transaksi tertinggi (paling rame)
         const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=28&page=1&sparkline=false');
         const data = await res.json();
 
-        // Rombak data biar pas sama struktur HTML/CSS lu
         const formattedData = data.map((coin: any, index: number) => {
-          // Bagi-bagi kategori secara merata ke semua koin biar tab-nya kaga kosong
           const assignedCategory = tabs[index % tabs.length];
 
           return {
             id: coin.id,
             name: coin.name,
             symbol: `${coin.symbol.toUpperCase()}/USD`,
-            value: coin.current_price.toLocaleString(),
-            price: coin.current_price.toLocaleString(),
-            change: `${coin.price_change_percentage_24h > 0 ? '+' : ''}${coin.price_change_percentage_24h?.toFixed(2) || 0}%`,
+            // Anti Null
+            value: coin.current_price?.toLocaleString() || "0",
+            price: coin.current_price?.toLocaleString() || "0",
+            change: `${coin.price_change_percentage_24h > 0 ? '+' : ''}${coin.price_change_percentage_24h?.toFixed(2) || '0.00'}%`,
             color: coin.price_change_percentage_24h > 0 ? "green" : "red",
             icon: coin.image,
             category: assignedCategory,
-            active: index === 0 // Bikin koin yang paling atas dapet efek CSS 'active'
+            active: index === 0
           };
         });
 
@@ -48,7 +45,6 @@ export default function Trend() {
     fetchTrendingCoins();
   }, []);
 
-  // Fungsi Filter
   const filteredData = liveTrends.filter((coin) => coin.category === activeTab);
 
   return (
@@ -56,7 +52,6 @@ export default function Trend() {
       <div className="container">
         <div className="trend-tab">
           
-          {/* TAB NAVIGATION */}
           <ul className="tab-nav">
             {tabs.map((tab) => (
               <li key={tab}>
@@ -70,7 +65,6 @@ export default function Trend() {
             ))}
           </ul>
 
-          {/* TAB CONTENT (CARD LIST) */}
           <ul className="tab-content">
             {loading ? (
               <li style={{ width: '100%', textAlign: 'center', color: '#888', padding: '20px' }}>
